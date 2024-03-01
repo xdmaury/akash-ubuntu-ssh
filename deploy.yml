@@ -1,0 +1,37 @@
+---
+version: "2.0"
+services:
+  ubunut:
+    image: xdmaury/akash-ubuntu-ssh:v1.0.0
+    expose:
+      - port: 5000
+        as: 80
+        to:
+          - global: true
+      - port: 22
+        as: 22
+        to:
+          - global: true
+    env:
+      - SSH_PASS=<YOUR_PASSWORD>
+profiles:
+  compute:
+    ubunut:
+      resources:
+        cpu:
+          units: 1
+        memory:
+          size: 1024Mi
+        storage:
+          - size: 1024Mi
+  placement:
+    akash:
+      pricing:
+        ubunut:
+          denom: uakt
+          amount: 10000
+deployment:
+  ubunut:
+    akash:
+      profile: ubunut
+      count: 1
